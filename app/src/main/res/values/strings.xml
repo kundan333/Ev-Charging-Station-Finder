@@ -7,4 +7,9 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="earth">Earth</string>
+    <string name="home">home</string>
+    <string name="shareable">shareable</string>
+    <string name="evstation">evstation</string>
+
+    <string name="title_activity_vehiclecharger">Map</string>
 </resources>
