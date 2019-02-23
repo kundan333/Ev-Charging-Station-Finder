@@ -19,9 +19,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.clustering.ClusterManager;
+import com.triplethree.models.ClusterMarker;
+import com.triplethree.models.EvCharger;
+import com.triplethree.utils.CustomInfoWindowAdapter;
+import com.triplethree.utils.MyClusterManagerRenderer;
+
+import java.util.ArrayList;
 
 public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallback {
 
@@ -33,6 +41,13 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
     private static final int LOCATION_PERMISSION_GRANTED_REQUEST_CODE = 1234;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private static final float DEFAULT_ZOOM = 15f;
+
+
+
+    private LatLngBounds mMapBoundary;
+    private ClusterManager<ClusterMarker> mClusterManager;
+    private MyClusterManagerRenderer mClusterManagerRenderer;
+    private ArrayList<ClusterMarker> mClusterMarkers = new ArrayList<>();
 
 
     @Override
@@ -47,7 +62,7 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
 
 
     private void getDeviceLocation() {
-
+        Log.d(TAG, "getDeviceLocation: device location called");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         try {
             if (mLoactionPermissonGranted) {
@@ -77,8 +92,10 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
     private void moveCamera(LatLng latLng, float zoom,String title) {
         Log.d(TAG, "moveCamera : moving the camera to :lat " + latLng.latitude + " , lng " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-        MarkerOptions options = new MarkerOptions().position(latLng).title(title);
-        mMap.addMarker(options);
+        //MarkerOptions options = new MarkerOptions().position(latLng).title(title);
+        //mMap.addMarker(options);
+        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(this));
+        addMapMarkers(latLng);
     }
 
 
@@ -126,6 +143,86 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
 
     }
 
+
+    private void addMapMarkers(LatLng latLng){
+
+        if(mMap != null){
+
+            if(mClusterManager == null){
+                mClusterManager = new ClusterManager<ClusterMarker>(this.getApplicationContext(), mMap);
+            }
+            if(mClusterManagerRenderer == null){
+                mClusterManagerRenderer = new MyClusterManagerRenderer(
+                        this,
+                        mMap,
+                        mClusterManager
+                );
+                mClusterManager.setRenderer(mClusterManagerRenderer);
+            }
+/*
+            for(UserLocation userLocation: mUserLocations){
+
+                Log.d(TAG, "addMapMarkers: location: " + userLocation.getGeo_point().toString());
+                try{
+                    String snippet = "";
+                    if(userLocation.getUser().getUser_id().equals(FirebaseAuth.getInstance().getUid())){
+                        snippet = "This is you";
+                    }
+                    else{
+                        snippet = "Determine route to " + userLocation.getUser().getUsername() + "?";
+                    }
+
+                    int avatar = R.drawable.ev_station; // set the default avatar
+                    try{
+                        avatar = Integer.parseInt(userLocation.getUser().getAvatar());
+                    }catch (NumberFormatException e){
+                        Log.d(TAG, "addMapMarkers: no avatar for " + userLocation.getUser().getUsername() + ", setting default.");
+                    }
+                    ClusterMarker newClusterMarker = new ClusterMarker(
+                            new LatLng(userLocation.getGeo_point().getLatitude(), userLocation.getGeo_point().getLongitude()),
+                            userLocation.getUser().getUsername(),
+                            snippet,
+                            avatar,
+                            userLocation.getUser()
+                    );
+                    mClusterManager.addItem(newClusterMarker);
+                    mClusterMarkers.add(newClusterMarker);
+
+                }catch (NullPointerException e){
+                    Log.e(TAG, "addMapMarkers: NullPointerException: " + e.getMessage() );
+                }
+
+            }
+            */
+
+          try{
+                String snippet = "This <br> is you";
+
+
+                      int avatar = R.drawable.ev_station; // set the default avatar
+                        EvCharger evCharger = new EvCharger();
+                        ClusterMarker newClusterMarker = new ClusterMarker(
+                                   new LatLng(latLng.latitude, latLng.longitude),
+                        "Ev Station",
+                        snippet,"yess",
+                        avatar,
+                        evCharger
+
+                );
+
+                mClusterManager.addItem(newClusterMarker);
+                mClusterMarkers.add(newClusterMarker);
+
+            }catch (NullPointerException e){
+                Log.e(TAG, "addMapMarkers: NullPointerException: " + e.getMessage() );
+            }
+
+            mClusterManager.cluster();
+
+        }
+    }
+
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -146,6 +243,9 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
         */
 
     }
+
+
+
 
 
 

@@ -1,9 +1,11 @@
 package com.triplethree.slytherine;
-
+import android.graphics.Canvas;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.view.TextureView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,9 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     TextView home,shareable,evstation;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +33,17 @@ public class MainActivity extends AppCompatActivity
         shareable=findViewById(R.id.shareable);
         evstation=findViewById(R.id.evstation);
 
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(MainActivity.this,Vehiclecharger.class);
+                startActivity(intent);
+            }
+        });
+
         setSupportActionBar(toolbar);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -38,7 +53,19 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+        Canvas canvas  = new Canvas();
+        String[] labels = {"monday","tuesday","wednesday"};
+        float  [] values = {10f,20f,15f};
 
+/*
+        LineSet dataset = new LineSet(labels,values);
+
+        LineChartView lineChartView = findViewById(R.id.batteryLineChart);
+
+
+        lineChartView.onAttachedToWindow();
+        lineChartView.onDrawChart(canvas,);
+*/
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
