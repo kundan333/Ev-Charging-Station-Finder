@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<item
+    android:id="@+id/action_home"
+    android:enabled="true"
+    android:title="home"
+    android:icon="@drawable/ic_home_black_24dp"
+    app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/evstation"
+        android:enabled="true"
+        android:title="vehicle charger station"
+        android:icon="@drawable/ic_battery_charging_30_black_24dp"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/shareable"
+        android:enabled="true"
+        android:title="shared by other"
+        android:icon="@drawable/ic_shopping_cart_black_24dp"
+        app:showAsAction="ifRoom"/>
+
+
+</menu>
