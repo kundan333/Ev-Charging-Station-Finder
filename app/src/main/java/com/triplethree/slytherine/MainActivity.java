@@ -28,13 +28,6 @@ public class MainActivity extends AppCompatActivity
         shareable=findViewById(R.id.shareable);
         evstation=findViewById(R.id.evstation);
 
-home.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        Intent intent=new Intent(MainActivity.this,Vehiclecharger.class);
-        startActivity(intent);
-    }
-});
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -55,6 +48,7 @@ home.setOnClickListener(new View.OnClickListener() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
 
     @Override
     public void onBackPressed() {

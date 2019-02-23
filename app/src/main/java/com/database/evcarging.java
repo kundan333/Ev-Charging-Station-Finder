@@ -28,7 +28,7 @@ public class evcarging extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 boolean result=databaseHelper.insertData(Integer.parseInt(id.getText().toString()),name.getText().toString(),
-        address.getText().toString(),Float.parseFloat(amount.getText().toString()),Integer.parseInt(type.getText().toString());
+        address.getText().toString(),Long.parseLong(amount.getText().toString()),type.getText().toString());
             }
         });
     }
