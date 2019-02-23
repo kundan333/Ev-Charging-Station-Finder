@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity
         shareable=findViewById(R.id.shareable);
         evstation=findViewById(R.id.evstation);
 
+
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+
         setSupportActionBar(toolbar);
 
 
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
 
     @Override
     public void onBackPressed() {
