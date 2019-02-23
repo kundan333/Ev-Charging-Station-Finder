@@ -48,12 +48,13 @@ public class MainActivity extends AppCompatActivity
 
 
         LineSet dataset = new LineSet(labels,values);
+       /*
         LineChartView lineChartView = findViewById(R.id.batteryLineChart);
 
 
         lineChartView.onAttachedToWindow();
         lineChartView.onDrawChart(canvas,);
-
+*/
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
