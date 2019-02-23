@@ -1,6 +1,6 @@
 package com.triplethree.slytherine;
-
 import android.graphics.Canvas;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -17,12 +17,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.db.chart.model.ChartSet;
-import com.db.chart.model.LineSet;
-import com.db.chart.view.LineChartView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    TextView home,shareable,evstation;
 
 
 
@@ -31,6 +29,17 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        home=findViewById(R.id.home);
+        shareable=findViewById(R.id.shareable);
+        evstation=findViewById(R.id.evstation);
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(MainActivity.this,Vehiclecharger.class);
+                startActivity(intent);
+            }
+        });
         setSupportActionBar(toolbar);
 
 
@@ -46,9 +55,9 @@ public class MainActivity extends AppCompatActivity
         String[] labels = {"monday","tuesday","wednesday"};
         float  [] values = {10f,20f,15f};
 
-
+/*
         LineSet dataset = new LineSet(labels,values);
-       /*
+
         LineChartView lineChartView = findViewById(R.id.batteryLineChart);
 
 
@@ -120,5 +129,4 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-}
+}}
