@@ -31,7 +31,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
@@ -50,7 +50,15 @@
         <activity
             android:name=".Vehiclecharger"
             android:label="@string/title_activity_vehiclecha" />
-        <activity android:name="com.triplethree.database.evcarging"></activity>
+        <activity android:name="com.triplethree.database.evcarging" />
+        <activity android:name=".startactivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>
