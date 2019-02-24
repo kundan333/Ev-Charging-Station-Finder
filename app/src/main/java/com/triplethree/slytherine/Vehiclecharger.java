@@ -196,7 +196,7 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
             */
 
           try{
-                String snippet = "This <br> is you";
+                String snippet = "This is you";
 
 
                       int avatar = R.drawable.ev_station; // set the default avatar

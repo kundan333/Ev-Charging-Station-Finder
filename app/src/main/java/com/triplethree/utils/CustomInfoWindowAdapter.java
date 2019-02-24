@@ -11,12 +11,18 @@ import com.triplethree.slytherine.R;
 
 public class CustomInfoWindowAdapter implements  GoogleMap.InfoWindowAdapter{
 
-    private final View mWindow;
+    private View mWindow;
     private Context mContext;
 
     public CustomInfoWindowAdapter(Context context) {
         mContext = context;
-        mWindow = LayoutInflater.from(context).inflate(R.layout.custom_info_window, null);
+        try {
+        LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mWindow = mInflater.inflate(R.layout.custom_info_window, null);
+      }catch (Exception e){
+          e.printStackTrace();
+      }
+
     }
 
     private void rendowWindowText(Marker marker, View view){
