@@ -1,52 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/AppTheme"
     >
 
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/rel_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         >
 
     <ImageView
         android:id="@+id/ImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/marker" />
-
-    <TextView
-        android:id="@+id/ImageViewText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/ImageView"
-        android:layout_alignTop="@id/ImageView"
-        android:layout_alignRight="@id/ImageView"
-        android:layout_alignBottom="@id/ImageView"
-        android:text="something"
-
-    />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/title"
-        android:layout_below="@+id/ImageViewText"
-        android:layout_gravity="center_horizontal"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="#000"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:layout_alignLeft="@id/ImageView"
-        android:layout_alignTop="@id/ImageView"
-        android:layout_alignRight="@id/ImageView"
-        android:layout_alignBottom="@id/ImageView"
-        android:text="something"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:src="@drawable/marker"
         />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/ImageView"
+            android:layout_alignLeft="@id/ImageView"
+            android:layout_alignEnd="@id/ImageView"
+            android:layout_alignRight="@id/ImageView"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="something2"
+            android:textColor="#000"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/ImageViewText"
+            android:layout_below="@id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/ImageView"
+            android:layout_alignLeft="@id/ImageView"
+            android:layout_alignEnd="@id/ImageView"
+            android:layout_alignRight="@id/ImageView"
+            android:text="something1"
+            android:gravity="center"
+            />
 
     <TextView
         android:layout_width="wrap_content"
@@ -56,29 +61,33 @@
         android:textSize="14sp"
         android:textColor="#000"
         android:id="@+id/snippet"
-        android:layout_below="@+id/title"
+        android:layout_below="@id/ImageViewText"
+        android:layout_alignStart="@id/ImageView"
+        android:layout_alignEnd="@id/ImageView"
         android:layout_alignLeft="@id/ImageView"
-        android:layout_alignTop="@id/ImageView"
         android:layout_alignRight="@id/ImageView"
-        android:layout_alignBottom="@id/ImageView"
-        android:text="something"
+        android:text="something3"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
         />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:text="@string/earth"
-        android:maxLines="10"
-        android:textSize="14sp"
-        android:textColor="#000"
-        android:id="@+id/snippet2"
-        android:layout_below="@+id/snippet"
-        android:layout_alignLeft="@id/ImageView"
-        android:layout_alignTop="@id/ImageView"
-        android:layout_alignRight="@id/ImageView"
-        android:layout_alignBottom="@id/ImageView"
 
-        />
+        <TextView
+            android:id="@+id/snippet2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/snippet"
+            android:layout_alignStart="@id/ImageView"
+            android:layout_alignLeft="@id/ImageView"
+            android:layout_alignEnd="@id/ImageView"
+            android:layout_alignRight="@id/ImageView"
+            android:ellipsize="end"
+            android:maxLines="10"
+            android:text="@string/earth"
+            android:textColor="#000"
+            android:textSize="14sp"
+            android:layout_centerHorizontal="true"
+            />
+
 
     </RelativeLayout>
 
