@@ -1,16 +1,17 @@
-package com.database;
+package com.triplethree.database;
 
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.triplethree.slytherine.R;
 
 public class evcarging extends AppCompatActivity {
     TextInputEditText name,address,amount,latitute,longitude,type,id;
     TextView submit;
-    private  DatabaseHelper databaseHelper;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

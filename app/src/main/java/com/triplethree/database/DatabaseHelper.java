@@ -1,15 +1,10 @@
-package com.database;
+package com.triplethree.database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.location.Address;
 import android.support.annotation.Nullable;
-import android.view.View;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class DatabaseHelper  extends SQLiteOpenHelper {

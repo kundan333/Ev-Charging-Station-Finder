@@ -50,7 +50,7 @@
         <activity
             android:name=".Vehiclecharger"
             android:label="@string/title_activity_vehiclecha" />
-        <activity android:name="com.database.evcarging"></activity>
+        <activity android:name="com.triplethree.database.evcarging"></activity>
     </application>
 
 </manifest>

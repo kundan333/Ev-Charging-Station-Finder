@@ -2,43 +2,84 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-
     >
 
-    <LinearLayout
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rel_layout"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        >
+
+    <ImageView
+        android:id="@+id/ImageView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:src="@drawable/marker" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/title"
-            android:layout_gravity="center_horizontal"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="#000"
-            android:textSize="14sp"
-            android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/ImageViewText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/ImageView"
+        android:layout_alignTop="@id/ImageView"
+        android:layout_alignRight="@id/ImageView"
+        android:layout_alignBottom="@id/ImageView"
+        android:text="something"
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="10"
-            android:textSize="14sp"
-            android:textColor="#000"
-            android:id="@+id/snippet"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:text="@string/earth"
-            android:maxLines="10"
-            android:textSize="14sp"
-            android:textColor="#000"
-            android:id="@+id/snippet2"/>
-    </LinearLayout>
+    />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:layout_below="@+id/ImageViewText"
+        android:layout_gravity="center_horizontal"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="#000"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_alignLeft="@id/ImageView"
+        android:layout_alignTop="@id/ImageView"
+        android:layout_alignRight="@id/ImageView"
+        android:layout_alignBottom="@id/ImageView"
+        android:text="something"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="10"
+        android:textSize="14sp"
+        android:textColor="#000"
+        android:id="@+id/snippet"
+        android:layout_below="@+id/title"
+        android:layout_alignLeft="@id/ImageView"
+        android:layout_alignTop="@id/ImageView"
+        android:layout_alignRight="@id/ImageView"
+        android:layout_alignBottom="@id/ImageView"
+        android:text="something"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:text="@string/earth"
+        android:maxLines="10"
+        android:textSize="14sp"
+        android:textColor="#000"
+        android:id="@+id/snippet2"
+        android:layout_below="@+id/snippet"
+        android:layout_alignLeft="@id/ImageView"
+        android:layout_alignTop="@id/ImageView"
+        android:layout_alignRight="@id/ImageView"
+        android:layout_alignBottom="@id/ImageView"
+
+        />
+
+    </RelativeLayout>
 
 </LinearLayout>
