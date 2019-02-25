@@ -168,12 +168,12 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
 
             com.triplethree.models.Location  location  =
                     new com.triplethree.models.Location(latLng.latitude+0.1,latLng.longitude);
-            int  icon =  R.drawable.homestation;
-            BasicInfoOfEvCharger basicInfoOfEvCharger = new BasicInfoOfEvCharger(location,icon , "Maharaja", 5f,true);
+            BasicInfoOfEvCharger basicInfoOfEvCharger = new BasicInfoOfEvCharger(location, "Maharaja", 5f,true);
             EvStation  evStation = new EvStation(basicInfoOfEvCharger);
             EvCharger evCharger = new EvCharger(evStation);
             EvChargersInfo.init();
             EvChargersInfo.addEvChrger(evCharger);
+
 /*
             for(UserLocation userLocation: mUserLocations){
 

@@ -7,7 +7,7 @@ public class BasicInfoOfEvCharger {
     private float price;
     private boolean availability;
 
-    public BasicInfoOfEvCharger(Location location, int icon, String stationName, float price,boolean availability) {
+    public BasicInfoOfEvCharger(Location location,String stationName, float price,boolean availability) {
 
         this.location = location;
         this.stationName = stationName;
