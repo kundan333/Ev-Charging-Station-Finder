@@ -5,6 +5,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.triplethree.slytherine"
+        multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
@@ -31,7 +32,10 @@ dependencies {
     implementation 'com.jjoe64:graphview:4.2.2'
     implementation 'com.google.firebase:firebase-core:16.0.7'
     implementation 'com.google.firebase:firebase-firestore:18.0.1'
+    implementation 'com.google.gms:google-services:4.2.0'
+    implementation 'com.android.support:multidex:1.0.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
+
