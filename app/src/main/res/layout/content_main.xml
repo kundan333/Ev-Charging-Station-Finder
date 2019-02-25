@@ -29,6 +29,10 @@ card_view:cardElevation="6dp">
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:orientation="vertical">
+            <com.jjoe64.graphview.GraphView
+                android:layout_width="match_parent"
+                android:layout_height="200dip"
+                android:id="@+id/graph" />
             <TextView
                 android:text="@string/earth"
             android:id="@+id/txtName"
