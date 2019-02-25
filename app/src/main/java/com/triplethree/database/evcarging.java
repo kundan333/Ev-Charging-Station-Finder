@@ -22,13 +22,13 @@ public class evcarging extends AppCompatActivity {
         amount=findViewById(R.id.amount);
         address=findViewById(R.id.address);
         id=findViewById(R.id.id);
-   latitute =findViewById(R.id.latitude);
+        latitute =findViewById(R.id.latitude);
         longitude=findViewById(R.id.longitude);
         submit=(TextView)findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-boolean result=databaseHelper.insertData(Integer.parseInt(id.getText().toString()),name.getText().toString(),
+        boolean result=databaseHelper.insertData(Integer.parseInt(id.getText().toString()),name.getText().toString(),
         address.getText().toString(),Long.parseLong(amount.getText().toString()),type.getText().toString());
             }
         });

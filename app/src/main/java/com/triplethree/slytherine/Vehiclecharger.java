@@ -3,12 +3,15 @@ package com.triplethree.slytherine;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,9 +27,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.clustering.ClusterManager;
+import com.triplethree.models.BasicInfoOfEvCharger;
 import com.triplethree.models.ClusterMarker;
 import com.triplethree.models.EvCharger;
+import com.triplethree.models.EvStation;
 import com.triplethree.utils.CustomInfoWindowAdapter;
+import com.triplethree.utils.EvChargersInfo;
 import com.triplethree.utils.MyClusterManagerRenderer;
 
 import java.util.ArrayList;
@@ -159,6 +165,15 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
                 );
                 mClusterManager.setRenderer(mClusterManagerRenderer);
             }
+
+            com.triplethree.models.Location  location  =
+                    new com.triplethree.models.Location(latLng.latitude+0.1,latLng.longitude);
+            int  icon =  R.drawable.homestation;
+            BasicInfoOfEvCharger basicInfoOfEvCharger = new BasicInfoOfEvCharger(location,icon , "Maharaja", 5f,true);
+            EvStation  evStation = new EvStation(basicInfoOfEvCharger);
+            EvCharger evCharger = new EvCharger(evStation);
+            EvChargersInfo.init();
+            EvChargersInfo.addEvChrger(evCharger);
 /*
             for(UserLocation userLocation: mUserLocations){
 
@@ -198,9 +213,7 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
           try{
                 String snippet = "This is you";
 
-
-                      int avatar = R.drawable.ev_station; // set the default avatar
-                        EvCharger evCharger = new EvCharger();
+                        int avatar =R.drawable.ev_station ; // set the default avatar
                         ClusterMarker newClusterMarker = new ClusterMarker(
                                    new LatLng(latLng.latitude, latLng.longitude),
                         "Ev Station",
