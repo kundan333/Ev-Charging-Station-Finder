@@ -1,6 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    >
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Latitude"
+        android:inputType="text"
+        />
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Longtitude"
+        android:layout_gravity="center"
+        android:inputType="text"
+        />
+
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Station Name"
+        android:layout_gravity="center"
+        android:inputType="text"
+        />
+
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Price"
+        android:inputType="text"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="visibility"
+        />
+    <android.support.v7.widget.AppCompatCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/visibility"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="availability"
+        />
+    <android.support.v7.widget.AppCompatCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/availability"
+        />
+    <Button
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="signup"/>
+
+
+</LinearLayout>
