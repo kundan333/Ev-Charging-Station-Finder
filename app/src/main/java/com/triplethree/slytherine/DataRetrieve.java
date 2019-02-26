@@ -69,6 +69,7 @@ public class DataRetrieve {
                                 }
                                 Log.d(TAG, document.getId() + " => " + evCharger.getType());
                             }
+                            Log.d(TAG, "onComplete: true");
                             dataRetrieved = true;
 
                         } else {

@@ -1,6 +1,7 @@
 package com.triplethree.slytherine;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.content.res.Resources;
@@ -27,6 +28,10 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.maps.android.clustering.ClusterManager;
 import com.triplethree.models.BasicInfoOfEvCharger;
@@ -51,8 +56,8 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
     private static final int LOCATION_PERMISSION_GRANTED_REQUEST_CODE = 1234;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private static final float DEFAULT_ZOOM = 15f;
-    private DataRetrieve dataRetrieve;
-    private boolean dataRetrieved = false;
+   // private DataRetrieve dataRetrieve;
+    private volatile boolean dataRetrieved = false;
 
 
 
@@ -63,15 +68,22 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
 
 
 
+    private FirebaseFirestore firebaseFirestore;
+
+    private ArrayList<EvCharger> evChargers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehiclecharger);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-
-
+        FirebaseApp.initializeApp(this);
+        this.firebaseFirestore = FirebaseFirestore.getInstance();
+        evChargers=  new ArrayList<EvCharger>();
         getLocationPermission();
+
+
+
     }
 
 
@@ -157,7 +169,7 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
     }
 
 
-    private void addMapMarkers(){
+    public void addMapMarkers(){
 
         if(mMap != null){
 
@@ -174,8 +186,8 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
             }
             try{
 
-                Log.d(TAG, "addMapMarkers: evCharger size "+dataRetrieve.getEvChargers().size());
-            for (EvCharger evCharger:dataRetrieve.getEvChargers()){
+                Log.d(TAG, "addMapMarkers: evCharger size "+evChargers.size());
+            for (EvCharger evCharger:evChargers){
 
                 if (evCharger.getType()==1){
 
@@ -198,7 +210,7 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
                 }else if(evCharger.getType()==2){
                     Gson gson = new Gson();
                     HomeStaion homeStaion= gson.fromJson(evCharger.getChargerDetails().toString() , HomeStaion.class);
-                    Log.d(TAG, " => " + homeStaion.getBasicInfoOfEvCharger().getStationName());
+                    Log.d(TAG, " => " + evCharger.getChargerDetails().toString());
                     ClusterMarker newClusterMarker = new ClusterMarker(
                             new LatLng(homeStaion.getBasicInfoOfEvCharger().getLocation().getLatitude(),
                                     homeStaion.getBasicInfoOfEvCharger().getLocation().getLongtitude()),
@@ -257,14 +269,12 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
                 return;
             }
             mMap.setMyLocationEnabled(true);
-            dataRetrieve = new DataRetrieve(this);
+           // dataRetrieve = new DataRetrieve(this);
             mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(this));
-            dataRetrieved = dataRetrieve.isDataRetrieved();
-            while (!dataRetrieved){
-                dataRetrieved = dataRetrieve.isDataRetrieved();
-            }
-            Log.d(TAG, "onMapReady: after while loop");
-            addMapMarkers();
+            //dataRetrieved = dataRetrieve.isDataRetrieved();
+            loadData();
+
+
              
 
 
@@ -279,13 +289,55 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
     }
 
 
+    private void loadData(){
+        firebaseFirestore.collection("EvChargerTest")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                EvCharger evCharger = document.toObject(EvCharger.class);
+                                // EvChargersInfo.addEvChrger(evCharger);
+
+
+                                addEvCharger(evCharger);
+                                Log.d(TAG, "loadData: array size "+evChargers.size());
+
+                                if (evCharger.getType()==1){
+
+                                    Gson gson = new Gson();
+                                    EvStation evStation= gson.fromJson(evCharger.getChargerDetails().toString() , EvStation.class);
+                                    Log.d(TAG, document.getId() + " => " + evStation.getBasicInfoOfEvCharger().getStationName());
+
+
+                                }
+                                Log.d(TAG, document.getId() + " => " + evCharger.getType());
+                            }
+                            Log.d(TAG, "onComplete: true");
+                            addMapMarkers();
+                            dataRetrieved = true;
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
+    }
+
+/*
 
     class CheckDataRetrieved extends AsyncTask<Void, Void, Boolean> {
+        Context context;
+        CheckDataRetrieved(Context context){this.context=context;}
         @Override
         protected void onPostExecute(Boolean result){
             if(result){
                 dataRetrieved = true;
-                addMapMarkers();}
+                addMapMarkers(context);}
             else{
                 dataRetrieved = false;}
 
@@ -293,11 +345,22 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
         }
         @Override
         protected Boolean doInBackground(Void... params) {
+            Log.d(TAG, "doInBackground: InBackground");
             dataRetrieved=  dataRetrieve.isDataRetrieved();
+
+            try {
+                Thread.sleep(2000);
+            }catch (Exception e){}
+            addMapMarkers(context);
             Log.d(TAG, "doInBackground: data dataRetrieved = "+dataRetrieved);
             return true;
         }
     }
+*/
 
+    private void addEvCharger(EvCharger evCharger){
+        evChargers.add(evCharger);
+        Log.d(TAG, "addEvCharger: outside size" +evChargers.size());
+    }
 
 }

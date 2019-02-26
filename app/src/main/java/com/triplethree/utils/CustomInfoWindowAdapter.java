@@ -39,13 +39,14 @@ public class CustomInfoWindowAdapter implements  GoogleMap.InfoWindowAdapter{
 
         Gson gson = new Gson();
         String snippet = marker.getSnippet();
-        BasicInfoOfEvCharger basicInfoOfEvCharger= gson.fromJson(snippet, BasicInfoOfEvCharger.class);
+       // BasicInfoOfEvCharger basicInfoOfEvCharger= gson.fromJson(snippet, BasicInfoOfEvCharger.class);
         TextView tvSnippet = (TextView) view.findViewById(R.id.snippet);
 
         if(!snippet.equals("")){
-            tvSnippet.setText(basicInfoOfEvCharger.getStationName());
+            //tvSnippet.setText(basicInfoOfEvCharger.getStationName());
+            tvSnippet.setText(snippet);
         }
-
+/*
         TextView tvSnippet2 = (TextView) view.findViewById(R.id.snippet2);
         tvSnippet2.setText(String.valueOf(basicInfoOfEvCharger.getPrice()));
 
@@ -57,6 +58,7 @@ public class CustomInfoWindowAdapter implements  GoogleMap.InfoWindowAdapter{
             String notAvilable = "Not Avilable";
             avilability.setText(notAvilable);
         }
+        */
 
     }
 
