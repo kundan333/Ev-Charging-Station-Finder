@@ -20,8 +20,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.triplethree.models.BasicInfoOfEvCharger;
 import com.triplethree.models.EvCharger;
 import com.triplethree.models.EvStation;
+import com.triplethree.models.HomeStaion;
+import com.triplethree.models.ShareableBattery;
 import com.triplethree.utils.EvChargersInfo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,15 +88,10 @@ public class UpdateCharger extends AppCompatActivity {
 
     private void saveDetails(){
 
-        com.triplethree.models.Location  location  =
-                new com.triplethree.models.Location(Double.parseDouble( textInputEditTextLatitude.getText().toString()),Double.parseDouble(textInputEditTextLongtitude.getText().toString()));
-        BasicInfoOfEvCharger basicInfoOfEvCharger = new BasicInfoOfEvCharger(location, textInputEditTextStationName.getText().toString(), Float.parseFloat(textInputEditTextPrice.getText().toString())
-                ,checkBoxAvilability.isChecked());
-        EvStation evStation = new EvStation(basicInfoOfEvCharger);
-        EvCharger evCharger = new EvCharger(evStation);
 
+        EvCharger evCharger = getEvCharger();
 
-        firebaseFirestore.collection("EvChargerTest").document("EvStation").set(evCharger).addOnSuccessListener(
+        firebaseFirestore.collection("EvChargerTest").document().set(evCharger).addOnSuccessListener(
                 new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -107,6 +105,39 @@ public class UpdateCharger extends AppCompatActivity {
             }
         });
 
+    }
+
+    private EvCharger getEvCharger(){
+        if (checkBoxEvStation.isChecked()) {
+            com.triplethree.models.Location location =
+                    new com.triplethree.models.Location(Double.parseDouble(textInputEditTextLatitude.getText().toString()), Double.parseDouble(textInputEditTextLongtitude.getText().toString()));
+            BasicInfoOfEvCharger basicInfoOfEvCharger = new BasicInfoOfEvCharger(location, textInputEditTextStationName.getText().toString(), Float.parseFloat(textInputEditTextPrice.getText().toString())
+                    , checkBoxAvilability.isChecked());
+            EvStation evStation = new EvStation(basicInfoOfEvCharger);
+            EvCharger evCharger = new EvCharger(evStation);
+            return evCharger;
+        }
+        else if(checkBoxHomeStation.isChecked()){
+            com.triplethree.models.Location location =
+                    new com.triplethree.models.Location(Double.parseDouble(textInputEditTextLatitude.getText().toString()), Double.parseDouble(textInputEditTextLongtitude.getText().toString()));
+            BasicInfoOfEvCharger basicInfoOfEvCharger = new BasicInfoOfEvCharger(location, textInputEditTextStationName.getText().toString(), Float.parseFloat(textInputEditTextPrice.getText().toString())
+                    , checkBoxAvilability.isChecked());
+            HomeStaion homeStaion = new HomeStaion(basicInfoOfEvCharger,checkBoxVisibility.isChecked());
+            EvCharger evCharger = new EvCharger(homeStaion);
+            return evCharger;
+        }
+
+        else if(checkBoxShareableBattery.isChecked()){
+            com.triplethree.models.Location location =
+                    new com.triplethree.models.Location(Double.parseDouble(textInputEditTextLatitude.getText().toString()), Double.parseDouble(textInputEditTextLongtitude.getText().toString()));
+            BasicInfoOfEvCharger basicInfoOfEvCharger = new BasicInfoOfEvCharger(location, textInputEditTextStationName.getText().toString(), Float.parseFloat(textInputEditTextPrice.getText().toString())
+                    , checkBoxAvilability.isChecked());
+            ShareableBattery shareableBattery = new ShareableBattery(basicInfoOfEvCharger,checkBoxVisibility.isChecked());
+            EvCharger evCharger = new EvCharger(shareableBattery);
+            return evCharger;
+
+        }
+        return null;
     }
 
 
