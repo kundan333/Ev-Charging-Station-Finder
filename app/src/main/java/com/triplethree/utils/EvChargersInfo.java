@@ -19,4 +19,6 @@ public class EvChargersInfo {
     public static ArrayList<EvCharger> getEvChargers() {
         return evChargers;
     }
+
+
 }

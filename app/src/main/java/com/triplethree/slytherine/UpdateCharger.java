@@ -12,21 +12,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.triplethree.models.BasicInfoOfEvCharger;
 import com.triplethree.models.EvCharger;
 import com.triplethree.models.EvStation;
 import com.triplethree.models.HomeStaion;
 import com.triplethree.models.ShareableBattery;
-import com.triplethree.utils.EvChargersInfo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class UpdateCharger extends AppCompatActivity {
 
@@ -69,12 +65,15 @@ public class UpdateCharger extends AppCompatActivity {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-
+        DataRetrieve dataRetrieve = new DataRetrieve(this);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveDetails();
+                Log.d(TAG, "onClick: Runnig");
+
+
+                 saveDetails();
 
             }
         });
@@ -96,6 +95,7 @@ public class UpdateCharger extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "onSuccess: success");
+
 
             }
         }).addOnFailureListener(new OnFailureListener() {

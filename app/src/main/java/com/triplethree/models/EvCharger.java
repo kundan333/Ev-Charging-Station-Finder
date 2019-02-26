@@ -11,6 +11,7 @@ public class EvCharger {
         this.chargerDetails = chargerDetails;
         if (chargerDetails.getClass()==EvStation.class){
             this.type=1;
+
         }else if (chargerDetails.getClass()== HomeStaion.class){
             this.type=2;
         }else if (chargerDetails.getClass()==ShareableBattery.class){

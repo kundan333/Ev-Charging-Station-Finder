@@ -7,6 +7,9 @@ public class EvStation {
      private int icon;
 
 
+    public EvStation() {
+    }
+
     public EvStation(BasicInfoOfEvCharger basicInfoOfEvCharger) {
         this.basicInfoOfEvCharger = basicInfoOfEvCharger;
         updateIcon();
