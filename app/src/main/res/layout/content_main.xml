@@ -84,7 +84,6 @@ card_view:cardElevation="6dp">
             android:id="@+id/googlemapimage"
             android:layout_width="match_parent"
             android:layout_height="200dp" />
-
             <TextView
                 android:layout_marginRight="10dp"
                 android:layout_below="@+id/googlemapimage"
