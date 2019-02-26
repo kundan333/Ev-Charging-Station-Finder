@@ -6,6 +6,7 @@ import android.content.pm.ProviderInfo;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -26,11 +27,14 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
 import com.google.maps.android.clustering.ClusterManager;
 import com.triplethree.models.BasicInfoOfEvCharger;
 import com.triplethree.models.ClusterMarker;
 import com.triplethree.models.EvCharger;
 import com.triplethree.models.EvStation;
+import com.triplethree.models.HomeStaion;
+import com.triplethree.models.ShareableBattery;
 import com.triplethree.utils.CustomInfoWindowAdapter;
 import com.triplethree.utils.EvChargersInfo;
 import com.triplethree.utils.MyClusterManagerRenderer;
@@ -47,6 +51,8 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
     private static final int LOCATION_PERMISSION_GRANTED_REQUEST_CODE = 1234;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private static final float DEFAULT_ZOOM = 15f;
+    private DataRetrieve dataRetrieve;
+    private boolean dataRetrieved = false;
 
 
 
@@ -54,6 +60,8 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
     private ClusterManager<ClusterMarker> mClusterManager;
     private MyClusterManagerRenderer mClusterManagerRenderer;
     private ArrayList<ClusterMarker> mClusterMarkers = new ArrayList<>();
+
+
 
 
     @Override
@@ -100,8 +108,7 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
         //MarkerOptions options = new MarkerOptions().position(latLng).title(title);
         //mMap.addMarker(options);
-        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(this));
-        addMapMarkers(latLng);
+
     }
 
 
@@ -150,7 +157,7 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
     }
 
 
-    private void addMapMarkers(LatLng latLng){
+    private void addMapMarkers(){
 
         if(mMap != null){
 
@@ -165,66 +172,69 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
                 );
                 mClusterManager.setRenderer(mClusterManagerRenderer);
             }
+            try{
 
-            com.triplethree.models.Location  location  =
-                    new com.triplethree.models.Location(latLng.latitude+0.1,latLng.longitude);
-            BasicInfoOfEvCharger basicInfoOfEvCharger = new BasicInfoOfEvCharger(location, "Maharaja", 5f,true);
-            EvStation  evStation = new EvStation(basicInfoOfEvCharger);
-            EvCharger evCharger = new EvCharger(evStation);
-            EvChargersInfo.init();
-            EvChargersInfo.addEvChrger(evCharger);
+                Log.d(TAG, "addMapMarkers: evCharger size "+dataRetrieve.getEvChargers().size());
+            for (EvCharger evCharger:dataRetrieve.getEvChargers()){
 
-/*
-            for(UserLocation userLocation: mUserLocations){
+                if (evCharger.getType()==1){
 
-                Log.d(TAG, "addMapMarkers: location: " + userLocation.getGeo_point().toString());
-                try{
-                    String snippet = "";
-                    if(userLocation.getUser().getUser_id().equals(FirebaseAuth.getInstance().getUid())){
-                        snippet = "This is you";
-                    }
-                    else{
-                        snippet = "Determine route to " + userLocation.getUser().getUsername() + "?";
-                    }
-
-                    int avatar = R.drawable.ev_station; // set the default avatar
-                    try{
-                        avatar = Integer.parseInt(userLocation.getUser().getAvatar());
-                    }catch (NumberFormatException e){
-                        Log.d(TAG, "addMapMarkers: no avatar for " + userLocation.getUser().getUsername() + ", setting default.");
-                    }
+                    Gson gson = new Gson();
+                    EvStation evStation= gson.fromJson(evCharger.getChargerDetails().toString() , EvStation.class);
+                    Log.d(TAG, " => " + evStation.getBasicInfoOfEvCharger().getStationName());
                     ClusterMarker newClusterMarker = new ClusterMarker(
-                            new LatLng(userLocation.getGeo_point().getLatitude(), userLocation.getGeo_point().getLongitude()),
-                            userLocation.getUser().getUsername(),
-                            snippet,
-                            avatar,
-                            userLocation.getUser()
+                            new LatLng(evStation.getBasicInfoOfEvCharger().getLocation().getLatitude(),
+                                    evStation.getBasicInfoOfEvCharger().getLocation().getLongtitude()),
+                            "EV Station",
+                            evStation.getBasicInfoOfEvCharger().toString(),
+                            evStation.getIcon()
                     );
+
+
                     mClusterManager.addItem(newClusterMarker);
                     mClusterMarkers.add(newClusterMarker);
 
-                }catch (NullPointerException e){
-                    Log.e(TAG, "addMapMarkers: NullPointerException: " + e.getMessage() );
+
+                }else if(evCharger.getType()==2){
+                    Gson gson = new Gson();
+                    HomeStaion homeStaion= gson.fromJson(evCharger.getChargerDetails().toString() , HomeStaion.class);
+                    Log.d(TAG, " => " + homeStaion.getBasicInfoOfEvCharger().getStationName());
+                    ClusterMarker newClusterMarker = new ClusterMarker(
+                            new LatLng(homeStaion.getBasicInfoOfEvCharger().getLocation().getLatitude(),
+                                    homeStaion.getBasicInfoOfEvCharger().getLocation().getLongtitude()),
+                            "Home Station",
+                            homeStaion.getBasicInfoOfEvCharger().toString(),
+                            homeStaion.getIcon()
+                    );
+
+
+                    mClusterManager.addItem(newClusterMarker);
+                    mClusterMarkers.add(newClusterMarker);
+
+
+                }else if (evCharger.getType()==3){
+
+                    Gson gson = new Gson();
+                    ShareableBattery shareableBattery= gson.fromJson(evCharger.getChargerDetails().toString() , ShareableBattery.class);
+                    Log.d(TAG, " => " + shareableBattery.getBasicInfoOfEvCharger().getStationName());
+                    ClusterMarker newClusterMarker = new ClusterMarker(
+                            new LatLng(shareableBattery.getBasicInfoOfEvCharger().getLocation().getLatitude(),
+                                    shareableBattery.getBasicInfoOfEvCharger().getLocation().getLongtitude()),
+                            "Shareable Battery",
+                            shareableBattery.getBasicInfoOfEvCharger().toString(),
+                            shareableBattery.getIcon()
+                    );
+
+
+                    mClusterManager.addItem(newClusterMarker);
+                    mClusterMarkers.add(newClusterMarker);
+
+
                 }
 
             }
-            */
 
-          try{
-                String snippet = "This is you";
 
-                        int avatar =R.drawable.ev_station ; // set the default avatar
-                        ClusterMarker newClusterMarker = new ClusterMarker(
-                                   new LatLng(latLng.latitude, latLng.longitude),
-                        "Ev Station",
-                        snippet,"yess",
-                        avatar,
-                        evCharger
-
-                );
-
-                mClusterManager.addItem(newClusterMarker);
-                mClusterMarkers.add(newClusterMarker);
 
             }catch (NullPointerException e){
                 Log.e(TAG, "addMapMarkers: NullPointerException: " + e.getMessage() );
@@ -247,6 +257,17 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
                 return;
             }
             mMap.setMyLocationEnabled(true);
+            dataRetrieve = new DataRetrieve(this);
+            mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(this));
+            dataRetrieved = dataRetrieve.isDataRetrieved();
+            while (!dataRetrieved){
+                dataRetrieved = dataRetrieve.isDataRetrieved();
+            }
+            Log.d(TAG, "onMapReady: after while loop");
+            addMapMarkers();
+             
+
+
         }
         /*
         // Add a marker in Sydney and move the camera
@@ -259,7 +280,24 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
 
 
 
+    class CheckDataRetrieved extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected void onPostExecute(Boolean result){
+            if(result){
+                dataRetrieved = true;
+                addMapMarkers();}
+            else{
+                dataRetrieved = false;}
 
+
+        }
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            dataRetrieved=  dataRetrieve.isDataRetrieved();
+            Log.d(TAG, "doInBackground: data dataRetrieved = "+dataRetrieved);
+            return true;
+        }
+    }
 
 
 }
