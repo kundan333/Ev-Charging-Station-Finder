@@ -9,6 +9,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.google.gson.Gson;
 import com.triplethree.models.BasicInfoOfEvCharger;
+import com.triplethree.models.EvStation;
+import com.triplethree.models.HomeStaion;
+import com.triplethree.models.ShareableBattery;
 import com.triplethree.slytherine.R;
 
 public class CustomInfoWindowAdapter implements  GoogleMap.InfoWindowAdapter{
@@ -39,13 +42,27 @@ public class CustomInfoWindowAdapter implements  GoogleMap.InfoWindowAdapter{
 
         Gson gson = new Gson();
         String snippet = marker.getSnippet();
-       // BasicInfoOfEvCharger basicInfoOfEvCharger= gson.fromJson(snippet, BasicInfoOfEvCharger.class);
-        TextView tvSnippet = (TextView) view.findViewById(R.id.snippet);
 
-        if(!snippet.equals("")){
-            //tvSnippet.setText(basicInfoOfEvCharger.getStationName());
-            tvSnippet.setText(snippet);
+        int type = Integer.parseInt(String.valueOf(snippet.charAt(0)));
+
+        String ChargerClass = snippet.substring(1);
+
+        if (type==1){
+            EvStation evStation= gson.fromJson(ChargerClass , EvStation.class);
+            setStationName(evStation.getBasicInfoOfEvCharger().getStationName(),view);
         }
+        else  if (type==2){
+            HomeStaion homeStaion= gson.fromJson(ChargerClass , HomeStaion.class);
+            setStationName(homeStaion.getBasicInfoOfEvCharger().getStationName(),view);
+        }
+        else if(type==3){
+            ShareableBattery shareableBattery= gson.fromJson(ChargerClass , ShareableBattery.class);
+            setStationName(shareableBattery.getBasicInfoOfEvCharger().getStationName(),view);
+        }
+
+
+       // BasicInfoOfEvCharger basicInfoOfEvCharger= gson.fromJson(snippet, BasicInfoOfEvCharger.class);
+
 /*
         TextView tvSnippet2 = (TextView) view.findViewById(R.id.snippet2);
         tvSnippet2.setText(String.valueOf(basicInfoOfEvCharger.getPrice()));
@@ -60,6 +77,11 @@ public class CustomInfoWindowAdapter implements  GoogleMap.InfoWindowAdapter{
         }
         */
 
+    }
+
+    private void setStationName(String stationName,View view){
+        TextView tvSnippet = (TextView) view.findViewById(R.id.snippet);
+        tvSnippet.setText(stationName);
     }
 
     @Override

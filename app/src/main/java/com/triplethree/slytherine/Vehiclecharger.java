@@ -14,9 +14,13 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+
 import android.util.Log;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -33,6 +37,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
+
+import com.google.gson.stream.JsonReader;
 import com.google.maps.android.clustering.ClusterManager;
 import com.triplethree.models.BasicInfoOfEvCharger;
 import com.triplethree.models.ClusterMarker;
@@ -44,6 +50,7 @@ import com.triplethree.utils.CustomInfoWindowAdapter;
 import com.triplethree.utils.EvChargersInfo;
 import com.triplethree.utils.MyClusterManagerRenderer;
 
+import java.io.StringReader;
 import java.util.ArrayList;
 
 public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallback {
@@ -192,13 +199,16 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
                 if (evCharger.getType()==1){
 
                     Gson gson = new Gson();
-                    EvStation evStation= gson.fromJson(evCharger.getChargerDetails().toString() , EvStation.class);
+                    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                    String json = ow.writeValueAsString(evCharger.getChargerDetails());
+                    Log.d(TAG, "onComplete: after "+json);
+                    EvStation evStation= gson.fromJson(json , EvStation.class);
                     Log.d(TAG, " => " + evStation.getBasicInfoOfEvCharger().getStationName());
                     ClusterMarker newClusterMarker = new ClusterMarker(
                             new LatLng(evStation.getBasicInfoOfEvCharger().getLocation().getLatitude(),
                                     evStation.getBasicInfoOfEvCharger().getLocation().getLongtitude()),
                             "EV Station",
-                            evStation.getBasicInfoOfEvCharger().toString(),
+                            "1"+json,
                             evStation.getIcon()
                     );
 
@@ -209,13 +219,16 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
 
                 }else if(evCharger.getType()==2){
                     Gson gson = new Gson();
-                    HomeStaion homeStaion= gson.fromJson(evCharger.getChargerDetails().toString() , HomeStaion.class);
+
+                    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                    String json = ow.writeValueAsString(evCharger.getChargerDetails());
+                    HomeStaion homeStaion= gson.fromJson(json , HomeStaion.class);
                     Log.d(TAG, " => " + evCharger.getChargerDetails().toString());
                     ClusterMarker newClusterMarker = new ClusterMarker(
                             new LatLng(homeStaion.getBasicInfoOfEvCharger().getLocation().getLatitude(),
                                     homeStaion.getBasicInfoOfEvCharger().getLocation().getLongtitude()),
                             "Home Station",
-                            homeStaion.getBasicInfoOfEvCharger().toString(),
+                            "2"+json,
                             homeStaion.getIcon()
                     );
 
@@ -227,13 +240,16 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
                 }else if (evCharger.getType()==3){
 
                     Gson gson = new Gson();
-                    ShareableBattery shareableBattery= gson.fromJson(evCharger.getChargerDetails().toString() , ShareableBattery.class);
+
+                    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                    String json = ow.writeValueAsString(evCharger.getChargerDetails());
+                    ShareableBattery shareableBattery= gson.fromJson(json , ShareableBattery.class);
                     Log.d(TAG, " => " + shareableBattery.getBasicInfoOfEvCharger().getStationName());
                     ClusterMarker newClusterMarker = new ClusterMarker(
                             new LatLng(shareableBattery.getBasicInfoOfEvCharger().getLocation().getLatitude(),
                                     shareableBattery.getBasicInfoOfEvCharger().getLocation().getLongtitude()),
                             "Shareable Battery",
-                            shareableBattery.getBasicInfoOfEvCharger().toString(),
+                            "3"+json,
                             shareableBattery.getIcon()
                     );
 
@@ -250,7 +266,7 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
 
             }catch (NullPointerException e){
                 Log.e(TAG, "addMapMarkers: NullPointerException: " + e.getMessage() );
-            }
+            }catch (JsonProcessingException  e){}
 
             mClusterManager.cluster();
 
@@ -269,9 +285,7 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
                 return;
             }
             mMap.setMyLocationEnabled(true);
-           // dataRetrieve = new DataRetrieve(this);
             mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(this));
-            //dataRetrieved = dataRetrieve.isDataRetrieved();
             loadData();
 
 
@@ -279,12 +293,7 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
 
 
         }
-        /*
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        */
+
 
     }
 
@@ -299,21 +308,10 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 EvCharger evCharger = document.toObject(EvCharger.class);
-                                // EvChargersInfo.addEvChrger(evCharger);
-
 
                                 addEvCharger(evCharger);
                                 Log.d(TAG, "loadData: array size "+evChargers.size());
 
-                                if (evCharger.getType()==1){
-
-                                    Gson gson = new Gson();
-                                    EvStation evStation= gson.fromJson(evCharger.getChargerDetails().toString() , EvStation.class);
-                                    Log.d(TAG, document.getId() + " => " + evStation.getBasicInfoOfEvCharger().getStationName());
-
-
-                                }
-                                Log.d(TAG, document.getId() + " => " + evCharger.getType());
                             }
                             Log.d(TAG, "onComplete: true");
                             addMapMarkers();
@@ -328,39 +326,8 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
 
     }
 
-/*
-
-    class CheckDataRetrieved extends AsyncTask<Void, Void, Boolean> {
-        Context context;
-        CheckDataRetrieved(Context context){this.context=context;}
-        @Override
-        protected void onPostExecute(Boolean result){
-            if(result){
-                dataRetrieved = true;
-                addMapMarkers(context);}
-            else{
-                dataRetrieved = false;}
-
-
-        }
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            Log.d(TAG, "doInBackground: InBackground");
-            dataRetrieved=  dataRetrieve.isDataRetrieved();
-
-            try {
-                Thread.sleep(2000);
-            }catch (Exception e){}
-            addMapMarkers(context);
-            Log.d(TAG, "doInBackground: data dataRetrieved = "+dataRetrieved);
-            return true;
-        }
-    }
-*/
-
     private void addEvCharger(EvCharger evCharger){
         evChargers.add(evCharger);
-        Log.d(TAG, "addEvCharger: outside size" +evChargers.size());
     }
 
 }

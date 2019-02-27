@@ -65,7 +65,7 @@ public class UpdateCharger extends AppCompatActivity {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        DataRetrieve dataRetrieve = new DataRetrieve(this);
+
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
