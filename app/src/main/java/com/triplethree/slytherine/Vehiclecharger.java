@@ -201,9 +201,9 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
                     Gson gson = new Gson();
                     ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
                     String json = ow.writeValueAsString(evCharger.getChargerDetails());
-                    Log.d(TAG, "onComplete: after "+json);
+                   // Log.d(TAG, "onComplete: after "+json);
                     EvStation evStation= gson.fromJson(json , EvStation.class);
-                    Log.d(TAG, " => " + evStation.getBasicInfoOfEvCharger().getStationName());
+                   // Log.d(TAG, " => " + evStation.getBasicInfoOfEvCharger().getStationName());
                     ClusterMarker newClusterMarker = new ClusterMarker(
                             new LatLng(evStation.getBasicInfoOfEvCharger().getLocation().getLatitude(),
                                     evStation.getBasicInfoOfEvCharger().getLocation().getLongtitude()),
@@ -223,7 +223,7 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
                     ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
                     String json = ow.writeValueAsString(evCharger.getChargerDetails());
                     HomeStaion homeStaion= gson.fromJson(json , HomeStaion.class);
-                    Log.d(TAG, " => " + evCharger.getChargerDetails().toString());
+                   // Log.d(TAG, " => " + evCharger.getChargerDetails().toString());
                     ClusterMarker newClusterMarker = new ClusterMarker(
                             new LatLng(homeStaion.getBasicInfoOfEvCharger().getLocation().getLatitude(),
                                     homeStaion.getBasicInfoOfEvCharger().getLocation().getLongtitude()),
