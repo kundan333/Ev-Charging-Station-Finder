@@ -80,7 +80,7 @@ card_view:cardElevation="6dp">
             android:layout_height="match_parent"
             android:padding="8dp"
             ><ImageView
-            android:src="@drawable/google_map_image"
+            android:src="@drawable/map_image"
             android:id="@+id/googlemapimage"
             android:layout_width="match_parent"
             android:layout_height="200dp" />
