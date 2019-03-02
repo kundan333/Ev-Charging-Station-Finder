@@ -1,44 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:background="@drawable/bitmap"
     android:orientation="vertical">
-    <android.support.design.widget.TextInputEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter User Name"
-        android:inputType="text"
-        />
-    <android.support.design.widget.TextInputEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter Your Email"
-        android:layout_gravity="center"
-        android:inputType="text"
-        />
 
-    <android.support.design.widget.TextInputEditText
+    <LinearLayout
+        android:layout_marginTop="80dp"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Create Password"
-        android:layout_gravity="center"
-        android:inputType="text"
-        />
+        android:layout_height="match_parent"
+        android:layout_below="@id/imageView"
+        android:orientation="vertical"
+        android:padding="15dp">
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter User Name"
+            android:id="@+id/username"
+            android:inputType="text"
+            />
 
-    <android.support.design.widget.TextInputEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Confirm password"
-        android:inputType="text"
-        />
-    <Button
-        android:layout_marginTop="20dp"
-        android:background="@drawable/button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="signup"/>
+        <EditText
+
+            android:id="@+id/editTextPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789"
+            android:ems="10"
+            android:hint="Enter phone"
+            android:inputType="phone" />
+
+
+            <Button
+                android:id="@+id/buttonGetVerificationCode"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/button"
+                android:text="Get Verification Code"
+                android:textAllCaps="false" />
+        <EditText
+            android:layout_marginTop="30dp"
+            android:id="@+id/editTextCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789"
+            android:hint="Enter code received"
+            android:inputType="number" />
+
+        <Button
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button"
+            android:id="@+id/buttonSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Sign In" />
+    </LinearLayout>
 
 </LinearLayout>
