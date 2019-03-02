@@ -1,7 +1,9 @@
 package com.triplethree.slytherine;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.content.res.Resources;
@@ -46,6 +48,7 @@ import com.triplethree.models.EvCharger;
 import com.triplethree.models.EvStation;
 import com.triplethree.models.HomeStaion;
 import com.triplethree.models.ShareableBattery;
+import com.triplethree.services.LocationUpdate;
 import com.triplethree.utils.CustomInfoWindowAdapter;
 import com.triplethree.utils.EvChargersInfo;
 import com.triplethree.utils.MyClusterManagerRenderer;
@@ -201,7 +204,7 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
                     Gson gson = new Gson();
                     ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
                     String json = ow.writeValueAsString(evCharger.getChargerDetails());
-                   // Log.d(TAG, "onComplete: after "+json);
+
                     EvStation evStation= gson.fromJson(json , EvStation.class);
                    // Log.d(TAG, " => " + evStation.getBasicInfoOfEvCharger().getStationName());
                     ClusterMarker newClusterMarker = new ClusterMarker(
@@ -287,7 +290,7 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
             mMap.setMyLocationEnabled(true);
             mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(this));
             loadData();
-
+            startService();
 
              
 
@@ -329,5 +332,34 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
     private void addEvCharger(EvCharger evCharger){
         evChargers.add(evCharger);
     }
+
+
+    private void startService(){
+        if(!isLocationServiceRunning()){
+            Intent serviceIntent = new Intent(this, LocationUpdate.class);
+//        this.startService(serviceIntent);
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
+
+                Vehiclecharger.this.startForegroundService(serviceIntent);
+            }else{
+                startService(serviceIntent);
+            }
+        }
+    }
+
+    private boolean isLocationServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)){
+            if("com.triplethree.services.LocationUpdate".equals(service.service.getClassName())) {
+                Log.d(TAG, "isLocationServiceRunning: location service is already running.");
+                return true;
+            }
+        }
+        Log.d(TAG, "isLocationServiceRunning: location service is not running.");
+        return false;
+    }
+
+
 
 }
