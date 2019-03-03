@@ -1,6 +1,7 @@
 package com.triplethree.services;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -10,10 +11,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.multidex.MultiDex;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -23,18 +28,25 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
-import com.triplethree.slytherine.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.triplethree.models.ClusterMarker;
+import com.triplethree.models.EvCharger;
+import com.triplethree.slytherine.ActivityRefer;
+import com.triplethree.slytherine.Vehiclecharger;
 
-public class LocationUpdate extends Service {
+import java.util.ArrayList;
+import java.util.List;
+
+@SuppressLint("ParcelCreator")
+public class LocationUpdate extends Service implements Parcelable {
 
         private static final String TAG = "LocationService";
 
-        private FusedLocationProviderClient mFusedLocationClient;
+    private ArrayList<ClusterMarker> mClusterMarkers;
+    private ArrayList<EvCharger> evChargers;
+
+    private FusedLocationProviderClient mFusedLocationClient;
         private final static long UPDATE_INTERVAL = 4 * 1000;  /* 4 secs */
         private final static long FASTEST_INTERVAL = 2000; /* 2 sec */
 
@@ -48,6 +60,8 @@ public class LocationUpdate extends Service {
         @Override
         public void onCreate() {
             super.onCreate();
+
+
 
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -65,16 +79,43 @@ public class LocationUpdate extends Service {
 
                 startForeground(1, notification);
             }
+
+
+
+
         }
 
         @Override
         public int onStartCommand(Intent intent, int flags, int startId) {
             Log.d(TAG, "onStartCommand: called.");
             getLocation();
+
+            Gson gson = new Gson();
+            String value = intent.getStringExtra("evchargers");
+            evChargers = gson.fromJson(value, new TypeToken<List<EvCharger>>(){}.getType());
+            Log.d(TAG, "onStartCommand: size of evchargers "+evChargers.size());
+
+            Vehiclecharger vehiclecharger = (Vehiclecharger)getApplicationContext();
+            vehiclecharger.clearMarkers();
+
+
+
+
+
+
+//            Log.d(TAG, "onStartCommand: 1st station name   "+evChargers.get(0).getChargerDetails().toString());
+
             return START_NOT_STICKY;
         }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(getBaseContext());
+    }
+
         private void getLocation() {
+
 
             // ---------------------------------- LocationRequest ------------------------------------
             // Create the location request to start receiving updates
@@ -99,14 +140,7 @@ public class LocationUpdate extends Service {
                             Log.d(TAG, "onLocationResult: got location result.");
 
                             Location location = locationResult.getLastLocation();
-/*
-                            if (location != null) {
-                                User user = ((UserClient)(getApplicationContext())).getUser();
-                                GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-                                UserLocation userLocation = new UserLocation(user, geoPoint, null);
-                                saveUserLocation(userLocation);
-                            }
-                            */
+
                         }
                     },
                     Looper.myLooper()); // Looper.myLooper tells this to repeat forever until thread is destroyed
@@ -139,4 +173,15 @@ public class LocationUpdate extends Service {
         }
 */
 
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
 }

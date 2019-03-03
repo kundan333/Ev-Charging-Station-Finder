@@ -179,6 +179,13 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
     }
 
 
+
+    public void clearMarkers(){
+
+        mClusterManager.clearItems();
+        Toast.makeText(getApplicationContext(),"Item Cleared",Toast.LENGTH_SHORT).show();
+    }
+
     public void addMapMarkers(){
 
         if(mMap != null){
@@ -272,94 +279,237 @@ public class Vehiclecharger extends FragmentActivity implements OnMapReadyCallba
             }catch (JsonProcessingException  e){}
 
             mClusterManager.cluster();
+            //mClusterManager.
+            // Items();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         }
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     @Override
+
     public void onMapReady(GoogleMap googleMap) {
+
         mMap = googleMap;
 
+
+
         if (mLoactionPermissonGranted) {
+
             getDeviceLocation();
+
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
 
                 return;
             }
+
+
+
             mMap.setMyLocationEnabled(true);
             mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(this));
-            loadData();
-            startService();
 
-             
+            loadData();
+
+
+
+
 
 
         }
 
 
+
+
+
     }
 
 
+
+
+
+
     private void loadData(){
+
         firebaseFirestore.collection("EvChargerTest")
+
                 .get()
+
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
                         if (task.isSuccessful()) {
+
                             for (QueryDocumentSnapshot document : task.getResult()) {
+
+
 
                                 EvCharger evCharger = document.toObject(EvCharger.class);
 
+
+
                                 addEvCharger(evCharger);
+
                                 Log.d(TAG, "loadData: array size "+evChargers.size());
 
+
                             }
+
+
                             Log.d(TAG, "onComplete: true");
+
                             addMapMarkers();
+                          //
+                            //  startService();
+
+
+
                             dataRetrieved = true;
 
+
                         } else {
+
                             Log.d(TAG, "Error getting documents: ", task.getException());
+
                         }
                     }
                 });
 
 
+
+
+
     }
+
+
 
     private void addEvCharger(EvCharger evCharger){
         evChargers.add(evCharger);
     }
 
 
+
+
+
     private void startService(){
+
         if(!isLocationServiceRunning()){
+
             Intent serviceIntent = new Intent(this, LocationUpdate.class);
-//        this.startService(serviceIntent);
+
+            try {
+
+
+
+
+
+                ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+
+                String json = ow.writeValueAsString(evChargers);
+               // Log.d(TAG, "startService: data" +json);
+               serviceIntent.putExtra("evchargers",json);
+
+
+
+               // extras.putString("evchargers",json);
+
+
+            }catch (Exception e){
+
+               // Log.d(TAG, "startService: Exception");
+
+                e.printStackTrace();
+
+            }
+
+
+           // serviceIntent.putExtra("markers",mClusterMarkers);
+           // serviceIntent.putExtra("evchargers",evChargers);
+
+
+
+
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
-
                 Vehiclecharger.this.startForegroundService(serviceIntent);
             }else{
+
                 startService(serviceIntent);
+
             }
+
         }
     }
+
+
+
 
     private boolean isLocationServiceRunning() {
+
         ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)){
+
             if("com.triplethree.services.LocationUpdate".equals(service.service.getClassName())) {
+
                 Log.d(TAG, "isLocationServiceRunning: location service is already running.");
+
                 return true;
+
             }
+
         }
+
         Log.d(TAG, "isLocationServiceRunning: location service is not running.");
+
         return false;
+
     }
 
 
 
+    public ArrayList<EvCharger> getEvChargers() {
+        return evChargers;
+    }
 }
+

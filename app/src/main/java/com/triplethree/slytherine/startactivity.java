@@ -1,5 +1,6 @@
 package com.triplethree.slytherine;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -33,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 public class startactivity extends AppCompatActivity {
     LinearLayout layout1;
     LinearLayout layout2;
+    Context context = getApplicationContext();
     TextView textView;
     EditText editTextPhone, editTextCode;
     private static final String TAG = "startactivity";
@@ -140,6 +142,8 @@ TextInputEditText username;
             return;
         }
 
+
+        
         if (phone.length() < 10) {
             editTextPhone.setError("Please enter a valid phone");
             editTextPhone.requestFocus();

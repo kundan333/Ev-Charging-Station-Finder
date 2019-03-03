@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     tools:showIn="@layout/app_bar_main">
+
 
 <android.support.v7.widget.Toolbar android:id="@+id/my_toolbar"
     android:layout_width="match_parent"
@@ -29,41 +33,16 @@ card_view:cardElevation="6dp">
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:orientation="vertical">
+
             <com.jjoe64.graphview.GraphView
                 android:layout_width="match_parent"
                 android:layout_height="200dip"
                 android:id="@+id/graph" />
-            <TextView
-                android:text="@string/earth"
-            android:id="@+id/txtName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="1dp"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:typeface="sans"
-                />
-            <TextView
-                android:text="@string/earth"
-            android:id="@+id/txtDistance"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="1dp"
-            android:textColor="@color/black" />
-            <TextView
-                android:text="@string/earth"
-            android:id="@+id/txtGravity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="1dp"
-            android:textColor="@color/black" />
-            <TextView
-                android:text="@string/earth"
-            android:id="@+id/txtDiameter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="1dp"
-            android:textColor="@color/black" />
+            <com.jjoe64.graphview.GraphView
+                android:layout_width="match_parent"
+                android:layout_height="200dip"
+                android:id="@+id/graph2" />
+
         </LinearLayout>
 </android.support.v7.widget.CardView>
 
@@ -125,3 +104,4 @@ card_view:cardElevation="6dp">
 
 
 </LinearLayout>
+</ScrollView>
